@@ -1,25 +1,25 @@
 from django.db import models
 
-# Create your models here.
 class Order(models.Model):
 
-  ESTADOS = (
-    ('PENDIENTE', 'Pendiente'),
-    ('EN PROCESO', 'En proceso'),
-    ('COMPLETADO', 'Completado'),
-  )
+  STATUS_CHOICES = [
+      ('Pendiente', 'Pendiente'),
+      ('En Proceso', 'En Proceso'),
+      ('Completado', 'Completado'),
+  ]
 
-  cliente = models.CharField(max_length=100)
-  capacidad = models.DecimalField(max_digits=10, decimal_places=2)
-  estado = models.CharField(
+  customer = models.CharField(max_length=100)
+  capacity = models.DecimalField(max_digits=10, decimal_places=2)
+  status = models.CharField(
       max_length=20,
-      choices=ESTADOS,
+      choices=STATUS_CHOICES,
       default='PENDIENTE',
   )
-  latitud_partida = models.CharField(max_length = 15, default='')
-  latitud_destino = models.CharField(max_length = 15, default='')
-  longitud_partida = models.CharField(max_length = 15, default='')
-  longitud_destino = models.CharField(max_length = 15 ,default='')
+  pickup_lat = models.DecimalField(max_digits=9, decimal_places=6)  # Latitud recogida
+  pickup_lng = models.DecimalField(max_digits=9, decimal_places=6)  # Longitud recogida
+  delivery_lat = models.DecimalField(max_digits=9, decimal_places=6) # Latitud entrega
+  delivery_lng = models.DecimalField(max_digits=9, decimal_places=6) # Longitud entrega
+  status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pendiente')
 
   def __str__(self):
     return self.id

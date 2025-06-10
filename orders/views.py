@@ -6,5 +6,9 @@ from .models import Order
 from .serializers import OrderSerializer
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()  # Consulta todas las órdenes
-    serializer_class = OrderSerializer  # Usa el serializer creado
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    filterset_fields = ['status']
+
+
+    

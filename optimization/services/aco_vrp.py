@@ -1,5 +1,27 @@
 import numpy as np
 import random
+import math
+
+def haversine_distance(lat1, lon1, lat2, lon2):
+    # Radio de la Tierra en km
+    R = 6371.0
+    
+    # Convertir grados a radianes
+    lat1_rad = math.radians(lat1)
+    lon1_rad = math.radians(lon1)
+    lat2_rad = math.radians(lat2)
+    lon2_rad = math.radians(lon2)
+    
+    # Diferencias
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+    
+    # Fórmula de Haversine
+    a = math.sin(dlat/2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon/2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    
+    return R * c  # Distancia en km
+
 
 class ACOVRPPD_MultiVehicle:
     def __init__(self, num_ants, iterations, evaporation_rate, alpha, beta, vehicles, nodes):
@@ -24,14 +46,26 @@ class ACOVRPPD_MultiVehicle:
                     pd_pairs[i] = delivery_id
         return pd_pairs
 
+    # def _compute_distances(self):
+    #     distances = np.zeros((self.num_nodes, self.num_nodes))
+    #     for i in range(self.num_nodes):
+    #         for j in range(self.num_nodes):
+    #             if i != j:
+    #                 x1, y1 = self.nodes[i][1], self.nodes[i][2]
+    #                 x2, y2 = self.nodes[j][1], self.nodes[j][2]
+    #                 distances[i][j] = np.sqrt((x1 - x2)**2 + (y1 - y2)**2)
+    #     return distances
+    
     def _compute_distances(self):
         distances = np.zeros((self.num_nodes, self.num_nodes))
         for i in range(self.num_nodes):
             for j in range(self.num_nodes):
                 if i != j:
-                    x1, y1 = self.nodes[i][1], self.nodes[i][2]
-                    x2, y2 = self.nodes[j][1], self.nodes[j][2]
-                    distances[i][j] = np.sqrt((x1 - x2)**2 + (y1 - y2)**2)
+                    # Obtener coordenadas geográficas
+                    lat1, lon1 = self.nodes[i][1], self.nodes[i][2]
+                    lat2, lon2 = self.nodes[j][1], self.nodes[j][2]
+                    
+                    distances[i][j] = haversine_distance(lat1, lon1, lat2, lon2)
         return distances
 
     def _validate_move(self, vehicle_routes, current_vehicle, next_node, current_load, current_distance):
