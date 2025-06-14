@@ -46,16 +46,6 @@ class ACOVRPPD_MultiVehicle:
                     pd_pairs[i] = delivery_id
         return pd_pairs
 
-    # def _compute_distances(self):
-    #     distances = np.zeros((self.num_nodes, self.num_nodes))
-    #     for i in range(self.num_nodes):
-    #         for j in range(self.num_nodes):
-    #             if i != j:
-    #                 x1, y1 = self.nodes[i][1], self.nodes[i][2]
-    #                 x2, y2 = self.nodes[j][1], self.nodes[j][2]
-    #                 distances[i][j] = np.sqrt((x1 - x2)**2 + (y1 - y2)**2)
-    #     return distances
-    
     def _compute_distances(self):
         distances = np.zeros((self.num_nodes, self.num_nodes))
         for i in range(self.num_nodes):

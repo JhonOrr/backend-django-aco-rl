@@ -3,9 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import decimal
-from orders.models import Order  # Importa tu modelo Order
-
-# Asegúrate de importar tu clase ACOVRPPD_MultiVehicle
+from orders.models import Order
 from .services.aco_vrp import ACOVRPPD_MultiVehicle
 
 @csrf_exempt
@@ -25,17 +23,16 @@ def run_aco(request):
             if not vehicles:
                 return JsonResponse({'error': 'Faltan vehículos.'}, status=400)
             
-            # 2. Obtener órdenes pendientes de la base de datos
+            # 2. Obtener órdenes de la base de datos
             orders = Order.objects.filter(status='Pendiente')
             
             if not orders.exists():
                 return JsonResponse({'error': 'No hay órdenes pendientes para procesar'}, status=400)
                 
-            # 3. Construir lista de nodos desde las órdenes
+            # 3. Construir lista de nodos a partir de las ordenes
             nodes = []
             
             # Agregar depósito (nodo 0)
-            # NOTA: Deberías tener un depósito definido, aquí usamos valores por defecto
             depot_lat = -12.087000  # Reemplaza con tu depósito real
             depot_lng = -76.97180
             nodes.append(['depot', depot_lat, depot_lng, 0])
