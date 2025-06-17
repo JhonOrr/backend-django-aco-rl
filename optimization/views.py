@@ -33,7 +33,7 @@ def run_aco(request):
             nodes = []
             
             # Agregar depósito (nodo 0)
-            depot_lat = -12.087000  # Reemplaza con tu depósito real
+            depot_lat = -12.087000
             depot_lng = -76.97180
             nodes.append(['depot', depot_lat, depot_lng, 0])
             
