@@ -5,6 +5,7 @@ import json
 import decimal
 from orders.models import Order
 from .services.aco_vrp import ACOVRPPD_MultiVehicle
+from .models import OptimizedRoute
 
 @csrf_exempt
 def run_aco(request):
@@ -120,8 +121,60 @@ def run_aco(request):
                 
                 result['routes'].append(route_info)
             
+            # 6. Guardar las rutas optimizadas en la base de datos
+            algorithm_params = {
+                'num_ants': num_ants,
+                'iterations': iterations,
+                'evaporation_rate': evaporation_rate,
+                'alpha': alpha,
+                'beta': beta
+            }
+            
+            OptimizedRoute.save_routes(
+                routes_data=result,
+                best_distance=best_distance,
+                algorithm_params=algorithm_params
+            )
+            
             return JsonResponse(result, safe=False)
         
+        except Exception as e:
+            return JsonResponse({'error': str(e), 'type': type(e).__name__}, status=500)
+    else:
+        return JsonResponse({'error': 'Método no permitido.'}, status=405)
+
+@csrf_exempt
+def get_routes(request):
+    """Endpoint para obtener las rutas optimizadas más recientes"""
+    if request.method == 'GET':
+        try:
+            # Obtener la ruta optimizada más reciente
+            latest_route = OptimizedRoute.get_latest()
+            
+            if not latest_route:
+                return JsonResponse({
+                    'error': 'No hay rutas optimizadas disponibles. Ejecute primero el algoritmo ACO.'
+                }, status=404)
+            
+            # Preparar respuesta con información adicional
+            response_data = {
+                'routes': latest_route.routes_data,
+                'metadata': {
+                    'created_at': latest_route.created_at.isoformat(),
+                    'updated_at': latest_route.updated_at.isoformat(),
+                    'best_distance': latest_route.best_distance,
+                    'algorithm_params': {
+                        'num_ants': latest_route.num_ants,
+                        'iterations': latest_route.iterations,
+                        'evaporation_rate': latest_route.evaporation_rate,
+                        'alpha': latest_route.alpha,
+                        'beta': latest_route.beta
+                    }
+                }
+            }
+            
+            return JsonResponse(response_data, safe=False)
+            
         except Exception as e:
             return JsonResponse({'error': str(e), 'type': type(e).__name__}, status=500)
     else:
