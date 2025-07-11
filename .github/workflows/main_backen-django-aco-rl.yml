@@ -63,6 +63,9 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
+      - name: Create .env file for Azure
+        run: echo "DATABASE_URL=${{ secrets.ENV_DATABASE_URL }}" > .env
+
       - name: Login to Azure
         uses: azure/login@v2
         with:

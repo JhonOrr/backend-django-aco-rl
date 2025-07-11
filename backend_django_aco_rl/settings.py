@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'backend_django_aco_rl.wsgi.application'
 
 DATABASE_URL = os.getenv('DATABASE_URL')
 
-if DATABASE_URL:
+if DATABASE_URL and DATABASE_URL != 'None':
     try:
         # Parse DATABASE_URL for PostgreSQL
         tmpPostgres = urlparse(DATABASE_URL)
@@ -100,7 +100,9 @@ if DATABASE_URL:
                 'OPTIONS': dict(parse_qsl(tmpPostgres.query)) if tmpPostgres.query else {},
             }
         }
-    except Exception:
+        print(f"Using PostgreSQL database: {tmpPostgres.hostname}")
+    except Exception as e:
+        print(f"Error parsing DATABASE_URL: {e}")
         # Fallback to SQLite if DATABASE_URL is invalid
         DATABASES = {
             'default': {
@@ -108,6 +110,7 @@ if DATABASE_URL:
                 'NAME': BASE_DIR / 'db.sqlite3',
             }
         }
+        print("Falling back to SQLite")
 else:
     # Fallback to SQLite for development
     DATABASES = {
@@ -116,6 +119,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    print("No DATABASE_URL found, using SQLite")
 
 
 # Password validation

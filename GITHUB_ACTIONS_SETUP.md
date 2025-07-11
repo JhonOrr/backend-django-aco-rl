@@ -26,16 +26,21 @@ postgresql://username:password@host:port/database_name
 - Instala las dependencias
 - Ejecuta las migraciones
 - Despliega a Azure
+- **Crea el archivo .env en Azure** (¡Importante!)
 
 ## Errores Comunes y Soluciones:
 
-### ❌ Error: "No module named 'psycopg2'"
+### ❌ Error: "no such table: orders_order"
 
-**Solución:** Ya está incluido en requirements.txt
+**Solución:** El archivo .env ahora se crea en Azure también. Verifica que:
 
-### ❌ Error: "DATABASE_URL not found"
+1. El secret `ENV_DATABASE_URL` esté configurado correctamente
+2. La URL de PostgreSQL sea válida
+3. Las migraciones se ejecuten en Azure
 
-**Solución:** Verifica que el secret `ENV_DATABASE_URL` esté configurado
+### ❌ Error: "DATABASE_URL is None"
+
+**Solución:** El archivo .env se crea en el job de deploy también
 
 ### ❌ Error: "Connection refused" en base de datos
 
@@ -58,3 +63,11 @@ Una vez configurado el secret, cada vez que hagas push a main se desplegará aut
 1. Haz push a main
 2. Ve a Actions en GitHub para ver el progreso
 3. Si todo está bien, tu app estará en: `https://backen-django-aco-rl-fgagduasagdbejh8.northcentralus-01.azurewebsites.net`
+
+## Debugging:
+
+Si sigues teniendo problemas, puedes verificar:
+
+- Los logs de Azure en el portal
+- Los logs de GitHub Actions
+- Que el secret `ENV_DATABASE_URL` esté configurado correctamente
