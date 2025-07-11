@@ -85,20 +85,29 @@ WSGI_APPLICATION = 'backend_django_aco_rl.wsgi.application'
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 if DATABASE_URL:
-    # Parse DATABASE_URL for PostgreSQL
-    tmpPostgres = urlparse(DATABASE_URL)
-    
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': tmpPostgres.path.replace('/', ''),
-            'USER': tmpPostgres.username,
-            'PASSWORD': tmpPostgres.password,
-            'HOST': tmpPostgres.hostname,
-            'PORT': 5432,
-            'OPTIONS': dict(parse_qsl(tmpPostgres.query)),
+    try:
+        # Parse DATABASE_URL for PostgreSQL
+        tmpPostgres = urlparse(DATABASE_URL)
+        
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': tmpPostgres.path.replace('/', ''),
+                'USER': tmpPostgres.username,
+                'PASSWORD': tmpPostgres.password,
+                'HOST': tmpPostgres.hostname,
+                'PORT': tmpPostgres.port or 5432,
+                'OPTIONS': dict(parse_qsl(tmpPostgres.query)) if tmpPostgres.query else {},
+            }
         }
-    }
+    except Exception:
+        # Fallback to SQLite if DATABASE_URL is invalid
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 else:
     # Fallback to SQLite for development
     DATABASES = {

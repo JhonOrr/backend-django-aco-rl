@@ -65,8 +65,8 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B5F54BED6C9A4E36AB479FE78AAFC033 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FA0EF95108794082B84508C115D8E047 }}
 
-      - name: "Deploy to Azure Web App"
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "backen-django-aco-rl"
-          slot-name: "Production"
+          app-name: backen-django-aco-rl
+          slot-name: Production

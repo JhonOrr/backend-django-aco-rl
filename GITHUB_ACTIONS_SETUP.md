@@ -27,6 +27,34 @@ postgresql://username:password@host:port/database_name
 - Ejecuta las migraciones
 - Despliega a Azure
 
+## Errores Comunes y Soluciones:
+
+### ❌ Error: "No module named 'psycopg2'"
+
+**Solución:** Ya está incluido en requirements.txt
+
+### ❌ Error: "DATABASE_URL not found"
+
+**Solución:** Verifica que el secret `ENV_DATABASE_URL` esté configurado
+
+### ❌ Error: "Connection refused" en base de datos
+
+**Solución:** Verifica que la URL de PostgreSQL sea correcta
+
+### ❌ Error: "Static files not found"
+
+**Solución:** El workflow ya ejecuta `collectstatic`
+
+### ❌ Error: "App not found" en Azure
+
+**Solución:** Verifica que el nombre de la app sea `backen-django-aco-rl`
+
 ## Listo! 🚀
 
 Una vez configurado el secret, cada vez que hagas push a main se desplegará automáticamente.
+
+## Verificar que funciona:
+
+1. Haz push a main
+2. Ve a Actions en GitHub para ver el progreso
+3. Si todo está bien, tu app estará en: `https://backen-django-aco-rl-fgagduasagdbejh8.northcentralus-01.azurewebsites.net`
