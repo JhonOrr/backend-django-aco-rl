@@ -18,6 +18,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Create .env file from secret
+        run: echo "DATABASE_URL=${{ secrets.ENV_DATABASE_URL }}" > .env
 
       - name: Set up Python version
         uses: actions/setup-python@v5
