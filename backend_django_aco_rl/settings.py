@@ -160,7 +160,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.0.2.2']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.0.2.2', 'backen-django-aco-rl-fgagduasagdbejh8.northcentralus-01.azurewebsites.net']
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
