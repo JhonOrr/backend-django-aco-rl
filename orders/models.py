@@ -21,5 +21,7 @@ class Order(models.Model):
   delivery_lng = models.DecimalField(max_digits=9, decimal_places=6) # Longitud entrega
   status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pendiente')
 
+  created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación automática
+
   def __str__(self):
     return self.id
